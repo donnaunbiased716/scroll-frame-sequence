@@ -29,15 +29,20 @@
 
 ## 安裝
 
-播放器就是兩個檔案，沒有建置步驟也沒有相依。複製走，或直接從 repo 裝：
+播放器就是兩個檔案，沒有建置步驟也沒有相依。裝起來，或直接複製走。
 
 ```bash
-# 播放器 —— 把 src/scroll-sequence.js 與 src/scroll-sequence.css 複製進你的專案，
-# 或：
-npm install github:tangyistudio/scroll-frame-sequence
+# 播放器
+npm install scroll-frame-sequence
+# 或把 src/scroll-sequence.js 與 src/scroll-sequence.css 複製進你的專案
 
 # 工具
 pip install -r tools/requirements.txt   # Pillow、numpy；另外需要 ffmpeg
+```
+
+```js
+import { ScrollSequence } from 'scroll-frame-sequence';
+import 'scroll-frame-sequence/style.css';
 ```
 
 ---

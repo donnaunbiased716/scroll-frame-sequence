@@ -39,16 +39,21 @@ matter** — see [three-layer loading](#three-layer-loading).
 
 ## Install
 
-The player is two files with no build step and no dependencies. Copy them, or
-install straight from the repository:
+The player is two files with no build step and no dependencies — install it, or
+just copy them into your project.
 
 ```bash
-# player — copy src/scroll-sequence.js and src/scroll-sequence.css into your project,
-# or:
-npm install github:tangyistudio/scroll-frame-sequence
+# player
+npm install scroll-frame-sequence
+# or copy src/scroll-sequence.js and src/scroll-sequence.css
 
 # tools
 pip install -r tools/requirements.txt   # Pillow, numpy; also needs ffmpeg
+```
+
+```js
+import { ScrollSequence } from 'scroll-frame-sequence';
+import 'scroll-frame-sequence/style.css';
 ```
 
 ---

@@ -7,7 +7,8 @@
   "module": "src/scroll-sequence.js",
   "exports": {
     ".": "./src/scroll-sequence.js",
-    "./style.css": "./src/scroll-sequence.css"
+    "./style.css": "./src/scroll-sequence.css",
+    "./package.json": "./package.json"
   },
   "files": ["src", "README.md", "README.zh-TW.md", "LICENSE"],
   "repository": {
