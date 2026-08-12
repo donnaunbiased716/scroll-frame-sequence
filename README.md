@@ -5,8 +5,12 @@ plus the parts nobody documents.
 
 ![Scrubbing forward, stopping, and scrubbing back — the sequence follows the scroll position rather than a clock](docs/demo.webp)
 
-*Forward, stop, back. The sequence follows the scroll position, not a clock.
-Live: [tangyi.mx](https://www.tangyi.mx)*
+*Forward, stop, back. The sequence follows the scroll position, not a clock —
+which is the whole claim, and the reason this is not just a looping video.*
+
+*The sample frames are **deliberately blurred**: they are licensed footage, not
+part of this package, and the library is what is on show here rather than the
+film. In focus at [tangyi.mx](https://www.tangyi.mx).*
 
 A `<section>` scrolls; a video plays frame by frame under the user's finger.
 Stop scrolling and it stops on that frame. Scroll back and it runs backwards.
