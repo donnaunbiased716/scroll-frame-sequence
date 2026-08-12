@@ -3,6 +3,11 @@
 Scroll-driven image sequences with hold loops — the Apple-product-page effect,
 plus the parts nobody documents.
 
+![Scrubbing forward, stopping, and scrubbing back — the sequence follows the scroll position rather than a clock](docs/demo.webp)
+
+*Forward, stop, back. The sequence follows the scroll position, not a clock.
+Live: [tangyi.mx](https://www.tangyi.mx)*
+
 A `<section>` scrolls; a video plays frame by frame under the user's finger.
 Stop scrolling and it stops on that frame. Scroll back and it runs backwards.
 At chosen frames it can **hold** and play a small looping animation, so a
@@ -439,9 +444,15 @@ visitor sees nothing.
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE).
+The **code, tools and documentation** are MIT — see [LICENSE](LICENSE).
 
 Copyright (c) 2026 Tangyi Studio Co., Ltd.
 
-Built for [tangyi.mx](https://www.tangyi.mx) and extracted from it. No media
-assets are included; bring your own video.
+Built for [tangyi.mx](https://www.tangyi.mx) and extracted from it.
+
+**One exception, stated explicitly:** `docs/demo.webp` is a still sequence from
+that site, included so the README can show what the library does. It is
+© Tangyi Studio Co., Ltd., **not** covered by the MIT licence, and not part of
+the published package. Everything else here is yours to use.
+
+No other media is included — bring your own video.

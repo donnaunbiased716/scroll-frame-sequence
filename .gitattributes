@@ -1,0 +1,9 @@
+# Normalise line endings in the repository regardless of what the contributor's
+# platform checks out with. Without this, a Windows clone commits CRLF and every
+# subsequent diff is the whole file.
+* text=auto eol=lf
+
+*.webp binary
+*.png  binary
+*.jpg  binary
+*.mp4  binary

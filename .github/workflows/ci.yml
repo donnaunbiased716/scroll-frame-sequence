@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20, 22]   # 18 is the floor declared in package.json engines
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node --test          # no install step — the package has no dependencies
+
+  tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r tools/requirements.txt
+      - name: Byte-compile the pipeline tools
+        run: python -m compileall -q tools
+      - name: Check every tool starts and prints its help
+        run: |
+          for f in tools/*.py; do
+            python "$f" --help > /dev/null || exit 1
+          done
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: The published tarball must stay small and code-only
+        run: |
+          npm pack --dry-run --json > pack.json
+          node -e "
+            const p = JSON.parse(require('fs').readFileSync('pack.json'))[0];
+            const files = p.files.map(f => f.path).sort();
+            console.log(files.join('\n'));
+            const bad = files.filter(f => /\.(webp|jpe?g|png|gif|mp4|mov)$/i.test(f));
+            if (bad.length) throw new Error('media in the tarball: ' + bad);
+            if (p.size > 200000) throw new Error('tarball is ' + p.size + ' bytes');
+          "

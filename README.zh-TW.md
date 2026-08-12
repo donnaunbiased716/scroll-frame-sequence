@@ -2,6 +2,11 @@
 
 捲動驅動的逐幀影格序列，附停留循環 —— Apple 產品頁那種效果，加上通常沒人寫下來的那些部分。
 
+![向前捲、停住、往回捲 —— 序列跟著捲動位置走，不是跟著時間走](docs/demo.webp)
+
+*向前、停住、往回。序列跟著的是捲動位置，不是時鐘。
+線上實例：[tangyi.mx](https://www.tangyi.mx)*
+
 一個 `<section>` 被捲動，一支影片在使用者的手指下一幀一幀前進。停止捲動就停在那一格，往回捲就倒著播。在指定的影格上還可以**停住**並播一小段循環動畫，讓「凍住」的畫面仍然有呼吸。
 
 兩個部分，可以分開用：
@@ -362,8 +367,12 @@ English: [README.md](README.md) · [pipeline](docs/pipeline.md) ·
 
 ## 授權
 
-MIT，見 [LICENSE](LICENSE)。
+**程式碼、工具與文件**採 MIT，見 [LICENSE](LICENSE)。
 
 Copyright (c) 2026 瑭宜網路多媒體有限公司 Tangyi Studio Co., Ltd.
 
-為 [tangyi.mx](https://www.tangyi.mx) 而做，並從中抽出來開源。**不含任何影音素材**，請自備影片。
+為 [tangyi.mx](https://www.tangyi.mx) 而做，並從中抽出來開源。
+
+**一個明確的例外**：`docs/demo.webp` 是該網站的影格序列，放在這裡是為了讓 README 能展示這個函式庫在做什麼。它的著作權屬於瑭宜網路多媒體有限公司，**不在 MIT 授權範圍內**，也不包含在發佈到 npm 的套件裡。其餘所有內容都可以自由使用。
+
+除此之外**不含任何影音素材**，請自備影片。

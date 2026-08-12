@@ -16,6 +16,9 @@
     "README.zh-TW.md",
     "LICENSE"
   ],
+  "scripts": {
+    "test": "node --test"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tangyistudio/scroll-frame-sequence.git"
