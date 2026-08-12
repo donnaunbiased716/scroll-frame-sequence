@@ -49,6 +49,18 @@ The cost is bandwidth shape, not bandwidth size. A 25-second H.264 clip is about
 be there before the user scrolls. **Most of this project is about making that not
 matter** — see [three-layer loading](#three-layer-loading).
 
+### What that looks like on a page
+
+![A hero section driven by scroll: the copy changes with the frame, the scrollbar moves down and back up, and at the top the frame is pinned while a loop plays](docs/page-demo.webp)
+
+Watch the scrollbar rather than the picture. It goes down, comes back up, goes
+down again — and the frame follows it every time, because the frame *is* the
+scroll position. A video would keep playing while the bar sat still.
+
+It opens on a hold: the scrollbar is parked at the top and the picture is still
+moving. That is the idle loop, and it is the reason a "frozen" hero does not
+read as a hung page.
+
 ---
 
 ## Install
@@ -465,10 +477,10 @@ Copyright (c) 2026 Tangyi Studio Co., Ltd.
 
 Built for [tangyi.mx](https://www.tangyi.mx) and extracted from it.
 
-**Two exceptions, stated explicitly:** `docs/demo.webp` and
-`docs/hold-loop.webp` are still sequences from that site, included so the README
-can show what the library does. They are © Tangyi Studio Co., Ltd., **not**
-covered by the MIT licence, and not part of the published package. Everything
-else here is yours to use.
+**Three exceptions, stated explicitly:** `docs/demo.webp`,
+`docs/page-demo.webp` and `docs/hold-loop.webp` are still sequences from that
+site, included so the README can show what the library does. They are
+© Tangyi Studio Co., Ltd., **not** covered by the MIT licence, and not part of
+the published package. Everything else here is yours to use.
 
 No other media is included — bring your own video.
