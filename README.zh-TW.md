@@ -344,10 +344,11 @@ new ScrollSequence(container, options)
 |---|---|
 | [docs/pipeline.zh-TW.md](docs/pipeline.zh-TW.md) | 素材生產，含所有實測數字 |
 | [docs/player.zh-TW.md](docs/player.zh-TW.md) | 播放器怎麼運作、為什麼這樣設計 |
+| [docs/authoring.zh-TW.md](docs/authoring.zh-TW.md) | 餵資料給它的後台怎麼設計，與平台無關 |
 | [docs/lessons.zh-TW.md](docs/lessons.zh-TW.md) | 什麼失敗了、量到什麼、什麼不要再試 |
 
 English: [README.md](README.md) · [pipeline](docs/pipeline.md) ·
-[player](docs/player.md) · [lessons](docs/lessons.md)
+[player](docs/player.md) · [authoring](docs/authoring.md) · [lessons](docs/lessons.md)
 
 ---
 
@@ -355,7 +356,9 @@ English: [README.md](README.md) · [pipeline](docs/pipeline.md) ·
 
 這個專案**不包含** CMS、上傳器或儲存後端。影格就是網址，它們從哪來是你的事。
 
-一個來自實戰的提醒，細節在 [docs/lessons.zh-TW.md](docs/lessons.zh-TW.md#storage)：**不要把 150 個網址塞進 CMS 的單一文字欄位。** 會撞到長度上限、寫入失敗，而如果你的儲存流程是「先寫 localStorage 再寫資料庫」，站長自己看永遠正常，只有訪客看不到。
+這是刻意畫的界線，不是打發你——**怎麼存是關於你的團隊的決定，不該由一個動畫元件替你決定。** 但那也是剩下最多工作的地方，所以 **[docs/authoring.zh-TW.md](docs/authoring.zh-TW.md)** 把「產生那些網址的東西」的設計寫完整了：它只需要做的四件事、150 個網址要怎麼存才存得住（分塊紀錄加瀏覽器端快取——150 次讀取變 6 次，回訪是 0 次）、操作者必須能改到的每一個設定，以及兩種完全不會報錯的失敗模式。
+
+其中最糟那個的最短版本：**不要把 150 個網址塞進 CMS 的單一文字欄位。** 會撞到長度上限、寫入失敗，而如果你的儲存流程是「先寫 localStorage 再寫資料庫」，站長自己看永遠正常，只有訪客看不到。
 
 ## 授權
 

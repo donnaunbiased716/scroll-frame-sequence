@@ -409,22 +409,33 @@ it just stops breathing.
 |---|---|
 | [docs/pipeline.md](docs/pipeline.md) | producing the material, with the numbers |
 | [docs/player.md](docs/player.md) | how the player works and why it is built that way |
+| [docs/authoring.md](docs/authoring.md) | designing the tool that feeds it, on any stack |
 | [docs/lessons.md](docs/lessons.md) | what failed, what was measured, what to stop trying |
 
 Traditional Chinese: [README.zh-TW.md](README.zh-TW.md) ·
 [pipeline](docs/pipeline.zh-TW.md) · [player](docs/player.zh-TW.md) ·
-[lessons](docs/lessons.zh-TW.md)
+[authoring](docs/authoring.zh-TW.md) · [lessons](docs/lessons.zh-TW.md)
 
 ---
 
 ## Scope
 
 This project does **not** include a CMS, an uploader, or a storage backend.
-Frames are URLs; where they come from is your business. One note from
-experience, in [docs/lessons.md](docs/lessons.md#storage): do not put 150 URLs
-in a single CMS text field. It overflows, the write fails, and if your save path
-writes to `localStorage` first the editor keeps seeing the correct page while
-every visitor sees nothing.
+Frames are URLs; where they come from is your business.
+
+That is a deliberate boundary, not a shrug — how you store the list is a
+decision about your team, and an animation component should not make it for you.
+But it is also where most of the remaining work lives, so
+**[docs/authoring.md](docs/authoring.md)** documents the design of the thing that
+produces those URLs: the four jobs it has to do, how to store a 150-URL list so
+it survives (chunked records plus a client-side cache — 150 reads becomes 6,
+and 0 on a return visit), every setting an operator needs to reach, and the two
+failure modes that produce no error message at all.
+
+The shortest version of the worst one: do not put 150 URLs in a single CMS text
+field. It overflows, the write fails, and if your save path writes to
+`localStorage` first, the editor keeps seeing the correct page while every
+visitor sees nothing.
 
 ## Licence
 
