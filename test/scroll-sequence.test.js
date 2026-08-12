@@ -200,6 +200,25 @@ test('a hold claims its frame and releases once scrolled past', () => {
   assert.equal(seq.activeHoldIndex, 74);
 });
 
+test('the pan schedule is read in full-sequence frame numbers, not subsampled ones', () => {
+  // The schedule is authored against all 150 frames. On a phone the sequence
+  // subsamples to 48, and feeding the subsampled index to the lookup squashes
+  // the schedule into its first 48 keyframes — every later keyframe silently
+  // stops applying. This asserts the late one still lands.
+  globalThis.window.innerWidth = 390;
+  const seq = mount({
+    mobileFrameCount: 48,
+    mobilePan: [
+      { frame: 1,   cx: 0.5, fit: 'cover' },
+      { frame: 140, cx: 0.5, fit: 'contain' },   // past the 48-frame subsample
+    ],
+  });
+  scrollTo(seq, 1);                              // the last frame, 150 of 150
+  assert.equal(seq.imgA.style.objectFit, 'contain',
+    'a keyframe past mobileFrameCount must still apply');
+  globalThis.window.innerWidth = 1440;
+});
+
 test('reduced motion drops the loop but keeps the sequence', () => {
   reduceMotion = true;
   const seq = mount();

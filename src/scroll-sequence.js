@@ -291,12 +291,16 @@ export class ScrollSequence {
       this.lastIndex = index;
       this.opt.onFrame?.(origIndex);
     }
-    if (this.isMobile && this.opt.mobilePan?.length) this._applyPan(index);
+    // origIndex, not index: the pan schedule is authored against the full
+    // sequence. Feeding it the subsampled index squashes the whole schedule
+    // into the first `mobileFrameCount` keyframes, so on a 150-frame sequence
+    // sampled to 48 every keyframe past 48 silently stops applying.
+    if (this.isMobile && this.opt.mobilePan?.length) this._applyPan(origIndex);
 
     if (seg?.hold) this._startHold(seg.hold, seg.index);
     else if (this.activeHoldIndex !== -1) this._stopHold();
 
-    if (this.debugEl) this._paintDebug(p, index, seg?.hold || null);
+    if (this.debugEl) this._paintDebug(p, index, origIndex, seg?.hold || null);
   }
 
   _showFrame(index) {
@@ -338,8 +342,9 @@ export class ScrollSequence {
     }
   }
 
-  _applyPan(index) {
-    const { cx, fit } = panAt(this.opt.mobilePan, index + 1);
+  /** @param origIndex index in the *full* sequence — the schedule's frame space. */
+  _applyPan(origIndex) {
+    const { cx, fit } = panAt(this.opt.mobilePan, origIndex + 1);
     const pos = objectPositionFor(cx, window.innerWidth, window.innerHeight, this.opt.aspect);
     for (const im of [this.imgA, this.imgB, this.holdImg]) {
       im.style.objectFit = fit;
@@ -487,7 +492,7 @@ export class ScrollSequence {
 
   // -------------------------------------------------------------- debug ----
 
-  _paintDebug(p, index, hold) {
+  _paintDebug(p, index, origIndex, hold) {
     const url = this.frames[index] || '';
     let line = `progress ${(p * 100).toFixed(1)}%  frame ${index + 1}/${this.frames.length}`;
     if (hold) {
@@ -498,7 +503,7 @@ export class ScrollSequence {
       if (ready < hold.frames.length) line += `  loading ${ready}/${hold.frames.length}`;
     }
     if (this.isMobile && this.opt.mobilePan?.length) {
-      const { cx, fit } = panAt(this.opt.mobilePan, index + 1);
+      const { cx, fit } = panAt(this.opt.mobilePan, origIndex + 1);
       line += `  pan ${(cx * 100).toFixed(0)}% ${fit}`;
     }
     this.debugEl.textContent = `${line}  ...${url.split('/').pop()}`;
