@@ -1,5 +1,10 @@
 # scroll-frame-sequence
 
+[![npm](https://img.shields.io/npm/v/scroll-frame-sequence?color=cb3837&logo=npm)](https://www.npmjs.com/package/scroll-frame-sequence)
+[![CI](https://github.com/tangyistudio/scroll-frame-sequence/actions/workflows/ci.yml/badge.svg)](https://github.com/tangyistudio/scroll-frame-sequence/actions/workflows/ci.yml)
+[![dependencies: none](https://img.shields.io/badge/dependencies-none-2ea043)](package.json)
+[![licence: MIT](https://img.shields.io/badge/licence-MIT-2ea043)](LICENSE)
+
 捲動驅動的逐幀影格序列，附停留循環 —— Apple 產品頁那種效果，加上通常沒人寫下來的那些部分。
 
 ![向前捲、停住、往回捲 —— 序列跟著捲動位置走，不是跟著時間走](docs/demo.webp)

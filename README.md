@@ -1,5 +1,10 @@
 # scroll-frame-sequence
 
+[![npm](https://img.shields.io/npm/v/scroll-frame-sequence?color=cb3837&logo=npm)](https://www.npmjs.com/package/scroll-frame-sequence)
+[![CI](https://github.com/tangyistudio/scroll-frame-sequence/actions/workflows/ci.yml/badge.svg)](https://github.com/tangyistudio/scroll-frame-sequence/actions/workflows/ci.yml)
+[![dependencies: none](https://img.shields.io/badge/dependencies-none-2ea043)](package.json)
+[![licence: MIT](https://img.shields.io/badge/licence-MIT-2ea043)](LICENSE)
+
 Scroll-driven image sequences with hold loops — the Apple-product-page effect,
 plus the parts nobody documents.
 
