@@ -1,6 +1,6 @@
 {
   "name": "scroll-frame-sequence",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Scroll-driven image sequence player with hold loops, mobile pan and three-layer loading. Zero dependencies.",
   "type": "module",
   "main": "src/scroll-sequence.js",
