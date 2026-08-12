@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>scroll-frame-sequence — hold loops + mobile pan</title>
+<link rel="stylesheet" href="../../src/scroll-sequence.css" />
+<style>
+  html { margin: 0; }
+  body { margin: 0; overflow-x: clip; background: #0a0a0a; color: #fff;
+         font: 16px/1.6 system-ui, -apple-system, "Noto Sans TC", sans-serif; }
+  .pad { min-height: 60vh; display: grid; place-items: center; padding: 4rem 1.5rem; text-align: center; }
+  .beat { position: absolute; inset: auto 0 14% 0; text-align: center; padding: 0 1.5rem;
+          transition: opacity .35s ease; pointer-events: none; }
+  .beat h2 { font-size: clamp(1.4rem, 3.6vw, 2.4rem); margin: 0 0 .35rem; }
+  .beat p { margin: 0; opacity: .72; }
+</style>
+</head>
+<body>
+
+<section class="pad"><div><h1>Hold loops</h1><p>Three frames pause and breathe.</p></div></section>
+
+<section id="hero"></section>
+
+<section class="pad"><div><h1>Done</h1></div></section>
+
+<script type="module">
+  import { ScrollSequence } from '../../src/scroll-sequence.js';
+
+  const url = (dir, prefix, i, pad = 3) =>
+    `/${dir}/${prefix}${String(i).padStart(pad, '0')}.webp`;
+
+  const frames = Array.from({ length: 150 }, (_, i) => url('frames', 'f_', i + 1));
+  const hold   = (dir, n) => Array.from({ length: n }, (_, i) => url(dir, 'h_', i + 1));
+
+  // Captions are built first. The constructor applies the opening frame
+  // synchronously, so onProgress fires once before `new` returns — anything the
+  // callback reads has to be initialised by then.
+  const beats = [
+    { from: 1,   to: 50,  h: 'One',  p: 'A single subject, filling the frame.' },
+    { from: 51,  to: 100, h: 'Two',  p: 'A second one arrives.' },
+    { from: 101, to: 150, h: 'Both', p: 'And the frame has to hold them.' },
+  ].map((b) => {
+    const el = document.createElement('div');
+    el.className = 'beat';
+    el.style.opacity = '0';
+    const h = document.createElement('h2');
+    h.textContent = b.h;
+    const p = document.createElement('p');
+    p.textContent = b.p;
+    el.append(h, p);
+    return { ...b, el };
+  });
+
+  const seq = new ScrollSequence('#hero', {
+    frames,
+    poster: '/frames/f_150.webp',
+    sheetUrl: '/spritesheet.webp',
+    sheetCols: 9,
+    sheetRows: 17,
+    heightVh: 650,
+    mobileHeightVh: 450,
+    dim: 0.35,
+
+    holds: [
+      // First frame, weight 1: the idle animation. It loops forever while the
+      // user sits at the top and is gone the moment they scroll. Any larger
+      // weight makes them scroll through it before the page starts moving.
+      { index: 0, weight: 1, weightMobile: 1,
+        mode: 'pingpong', fps: 10, frames: hold('hold_open', 24) },
+
+      // A mid-sequence pause. pingpong because the source does not loop, and
+      // the motion has no direction (breathing, cloth, pulsing light), so
+      // running it backwards half the time is invisible.
+      { index: 74, weight: 60, weightMobile: 20,
+        mode: 'pingpong', fps: 10,
+        frames: hold('hold_mid', 24),
+        framesMobile: hold('hold_mid_720', 24) },
+
+      // The closing frame. `intro` plays once on first entry — a one-shot move
+      // that ends in a pose is not a loop and cannot be made into one. When it
+      // finishes the loop takes over, and scrolling back does not replay it.
+      { index: 149, weight: 60, weightMobile: 20,
+        mode: 'pingpong', fps: 10,
+        intro:  hold('hold_end_intro', 12),
+        frames: hold('hold_end_loop', 24) },
+    ],
+
+    // Portrait phones. cx is a ratio, never a pixel. See schema/mobile-pan.schema.json
+    // Values below are illustrative — author them against your own footage.
+    mobilePan: [
+      { frame: 1,   cx: 0.35, fit: 'cover'   },  // subject sits left of centre
+      { frame: 40,  cx: 0.50, fit: 'cover'   },  // ten-plus frames of travel, so it reads as a pan
+      { frame: 41,  cx: 0.50, fit: 'contain' },  // switch on a frame that already changes
+      { frame: 110, cx: 0.50, fit: 'cover'   },
+    ],
+    mobileFrameCount: 48,
+
+    onProgress: (p, frame, total) => {
+      // Frame numbers are always in the full 150, even when the phone is
+      // running the 48-frame subsample.
+      const i = beats.findIndex(b => frame + 1 >= b.from && frame + 1 <= b.to);
+      beats.forEach((b, k) => { b.el.style.opacity = k === i ? '1' : '0'; });
+    },
+  });
+
+  for (const b of beats) seq.overlay.appendChild(b.el);
+</script>
+
+</body>
+</html>

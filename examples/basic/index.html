@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>scroll-frame-sequence — basic</title>
+<link rel="stylesheet" href="../../src/scroll-sequence.css" />
+<style>
+  /* ⚠️ The rule that matters. `overflow-x: hidden` on <html> silently kills
+     position:sticky for every descendant. Use clip, on body. */
+  html { margin: 0; }
+  body { margin: 0; overflow-x: clip; background: #0a0a0a; color: #fff;
+         font: 16px/1.6 system-ui, -apple-system, "Noto Sans TC", sans-serif; }
+
+  .intro, .outro { min-height: 60vh; display: grid; place-items: center; padding: 4rem 1.5rem; }
+  .caption { text-align: center; max-width: 34rem; }
+  .caption h1 { font-size: clamp(1.8rem, 5vw, 3rem); margin: 0 0 .5rem; }
+  .caption p { opacity: .75; margin: 0; }
+  .meter { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%);
+           font: 13px ui-monospace, monospace; letter-spacing: .08em; opacity: .8; }
+</style>
+</head>
+<body>
+
+<section class="intro">
+  <div class="caption">
+    <h1>Scroll down</h1>
+    <p>The picture advances under your finger. Stop, and it stops on that frame.</p>
+  </div>
+</section>
+
+<!-- The sequence mounts here. Height comes from the heightVh option. -->
+<section id="hero"></section>
+
+<section class="outro">
+  <div class="caption">
+    <h1>That is the whole basic case</h1>
+    <p>Add <code>holds</code> for looping moments — see <code>examples/with-holds</code>.</p>
+  </div>
+</section>
+
+<script type="module">
+  import { ScrollSequence } from '../../src/scroll-sequence.js';
+
+  // Point these at your own frames. Nothing is bundled with the repo —
+  // the media belongs to whoever made it.
+  const FRAME_COUNT = 150;
+  const frames = Array.from({ length: FRAME_COUNT }, (_, i) =>
+    `/frames/f_${String(i + 1).padStart(3, '0')}.webp`);
+
+  // Built before the sequence: the constructor applies the first frame
+  // synchronously, so onProgress fires once before `new` returns. Anything the
+  // callback touches has to exist by then.
+  const meter = document.createElement('div');
+  meter.className = 'meter';
+
+  const seq = new ScrollSequence('#hero', {
+    frames,
+    poster: '/frames/f_001.webp',
+
+    // The fast-load layer. Both numbers come from build_spritesheet.py's output.
+    sheetUrl: '/spritesheet.webp',
+    sheetCols: 9,
+    sheetRows: 17,
+
+    // 650vh over a 900px viewport is 4950px of travel; 150 frames = 18.3px each,
+    // which sits in the comfortable band. See README, "How many frames?".
+    heightVh: 650,
+    dim: 0.35,
+
+    onProgress: (p, frame, total) => {
+      meter.textContent = `${String(frame + 1).padStart(3, '0')} / ${total}   ${(p * 100).toFixed(0)}%`;
+    },
+  });
+
+  // Anything you mount on .overlay sits above the frames and below nothing.
+  seq.overlay.appendChild(meter);
+
+  // Add ?seqdebug=1 to the URL for the diagnostic overlay.
+</script>
+
+</body>
+</html>

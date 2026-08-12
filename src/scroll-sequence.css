@@ -1,0 +1,99 @@
+/*!
+ * scroll-frame-sequence — stylesheet
+ * MIT License. Copyright (c) 2026 Tangyi Studio Co., Ltd.
+ */
+
+/*  ⚠️ The single most important rule in this file is not in this file.
+ *
+ *  If any ancestor — especially <html> — has `overflow-x: hidden`, it becomes
+ *  a scroll container and `position: sticky` silently stops sticking for every
+ *  descendant. The sequence then does not move at all, with no error anywhere.
+ *
+ *  Use this instead in your global stylesheet:
+ *      html { }                        no overflow-x here
+ *      body { overflow-x: clip; }      clips the same overflow, no container
+ */
+
+.sfs-root {
+  position: relative;
+  width: 100%;
+  background: #000;
+}
+
+.sfs-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;              /* avoids the mobile URL-bar jump */
+  width: 100%;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Fast-load layer: one request, low resolution, shows through until the
+   full-resolution frame above it has decoded. */
+.sfs-sheet {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  will-change: background-position;
+}
+
+/* Two alternating full-resolution layers. Opacity is toggled rather than
+   display so the outgoing bitmap stays composited for one more frame. */
+.sfs-frame,
+.sfs-hold {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.sfs-frame { opacity: 0; }
+.sfs-a { opacity: 1; }
+.sfs-hold { opacity: 0; }
+
+.sfs-dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Your content goes here — captions, headings, CTAs. */
+.sfs-slot {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sfs-debug {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 50;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #4ade80;
+  font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: pre;
+  pointer-events: none;
+}
+
+/*  prefers-reduced-motion is handled in JavaScript, not here.
+ *
+ *  The distinction that matters: the sequence advances only because the user is
+ *  scrolling, which is not the kind of motion the preference is asking about.
+ *  Hold loops play on their own, which is. So the player keeps the sequence and
+ *  drops the loops — see `respectReducedMotion` in scroll-sequence.js.
+ *
+ *  Nothing in this file transitions, so there is nothing here to switch off. */

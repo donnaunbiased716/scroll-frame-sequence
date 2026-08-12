@@ -1,0 +1,28 @@
+{
+  "name": "scroll-frame-sequence",
+  "version": "1.0.0",
+  "description": "Scroll-driven image sequence player with hold loops, mobile pan and three-layer loading. Zero dependencies.",
+  "type": "module",
+  "main": "src/scroll-sequence.js",
+  "module": "src/scroll-sequence.js",
+  "exports": {
+    ".": "./src/scroll-sequence.js",
+    "./style.css": "./src/scroll-sequence.css"
+  },
+  "files": ["src", "README.md", "README.zh-TW.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangyistudio/scroll-frame-sequence.git"
+  },
+  "homepage": "https://github.com/tangyistudio/scroll-frame-sequence#readme",
+  "bugs": "https://github.com/tangyistudio/scroll-frame-sequence/issues",
+  "keywords": [
+    "scroll", "scrollytelling", "image-sequence", "frame-sequence",
+    "scroll-driven-animation", "sticky", "spritesheet", "canvas-alternative",
+    "apple-style", "hero-animation"
+  ],
+  "license": "MIT",
+  "author": "Tangyi Studio Co., Ltd.",
+  "sideEffects": false,
+  "engines": { "node": ">=18" }
+}

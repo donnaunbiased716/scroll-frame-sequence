@@ -1,0 +1,23 @@
+# never commit media
+*.mp4
+*.mov
+*.webm
+frames/
+frames_*/
+hold*/
+*.webp
+!examples/**/*.webp
+spritesheet*.png
+survey_*.png
+review_*.jpg
+
+node_modules/
+dist/
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.venv/
+venv/
+.idea/
+.vscode/

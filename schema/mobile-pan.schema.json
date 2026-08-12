@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tangyistudio/scroll-frame-sequence/schema/mobile-pan.schema.json",
+  "title": "Mobile pan schedule",
+  "description": "Where a portrait viewport should look, frame by frame. A few hundred bytes replaces a second set of portrait assets.",
+  "type": "object",
+  "required": ["keyframes"],
+  "properties": {
+    "note": { "type": "string" },
+    "version": { "type": "string" },
+    "source": { "type": "string", "description": "which frame set this was authored against" },
+    "totalFrames": { "type": "integer", "minimum": 2 },
+    "interpolation": {
+      "type": "object",
+      "properties": {
+        "cx": { "enum": ["smooth", "linear"], "default": "smooth" },
+        "fit": { "enum": ["step"], "default": "step" }
+      }
+    },
+    "keyframes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["frame"],
+        "properties": {
+          "frame": { "type": "integer", "minimum": 1, "description": "1-based frame number" },
+          "cx": {
+            "type": "number", "minimum": 0, "maximum": 1, "default": 0.5,
+            "description": "horizontal target as a ratio of the source width; 0 = left edge, 1 = right edge. Never pixels."
+          },
+          "fit": {
+            "enum": ["cover", "contain"], "default": "cover",
+            "description": "cover fills the viewport; contain letterboxes so a wide composition survives"
+          },
+          "note": { "type": "string", "description": "why this keyframe exists — the only thing a human can review" }
+        }
+      }
+    }
+  }
+}
