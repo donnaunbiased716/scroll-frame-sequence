@@ -363,6 +363,79 @@ new ScrollSequence(container, options)
 
 ---
 
+## 搭配框架使用
+
+播放器自己管理它的 DOM，也完全不經過框架狀態，所以它只需要一個 ref 和一次清理。
+
+```jsx
+import { useEffect, useRef } from 'react';
+import { ScrollSequence } from 'scroll-frame-sequence';
+import 'scroll-frame-sequence/style.css';
+
+export function Hero({ frames }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const seq = new ScrollSequence(ref.current, { frames, heightVh: 650 });
+    return () => seq.destroy();      // 一定要，它掛著捲動監聽器
+  }, [frames]);
+
+  return <section ref={ref} />;
+}
+```
+
+Vue 的 `onMounted` / `onUnmounted`、Svelte 的 `onMount` 回傳值都是同一套寫法。React 18+ 的 Strict Mode 在開發時會跑兩次 effect，有 `destroy()` 就沒事。
+
+**不要把 `onProgress` 每次都寫進 state。** 它是連續觸發的。直接寫 DOM，或先量化 —— 見 [docs/player.zh-TW.md](docs/player.zh-TW.md)。
+
+---
+
+## 什麼時候該用別的東西
+
+這個函式庫只做一件事：把捲動位置對應到影格序號。有三個相鄰的問題，用別的工具更好。
+
+| 你想要 | 用 |
+|---|---|
+| 360° 產品旋轉，或讓序列自己高幀率播放 | 為播放而生的序列渲染器，例如 `fast-image-sequence` |
+| 捲到某一段就觸發某件事 —— 圖表、字幕、地圖移動 | [scrollama](https://github.com/russellsamora/scrollama) |
+| 平滑／慣性捲動 | Lenis，它跟這個是互補的 |
+| 綁在捲動上的通用動畫時間軸 | GSAP ScrollTrigger。這個比它窄，但附了素材產製管線 |
+
+這個專案之所以要獨立存在：上面沒有一個把捲動位置**當成**影格本身，也沒有一個告訴你影格要怎麼生出來。
+
+---
+
+## 常見問題
+
+**跟「把影片的 `currentTime` 綁在捲動上」差在哪？**
+在每次捲動事件去 seek 影片，跨瀏覽器並不可靠 —— seek 是非同步的、會對齊關鍵影格，而且在手機上會被節流。靜態圖沒有 seek 這件事。代價是影格必須在使用者捲到之前就備齊，而那正是[三層載入](#三層載入)要解決的。
+
+**要幾張影格？**
+判準不是秒數，是**每一格分到多少捲動像素**。15–20 px 是舒適區。
+
+**5 MB 的影格不會很慢嗎？**
+如果你等它全部載完就會。但你不用等：約 2 MB 的拼接圖讓動畫一秒左右就能捲，全解析度影格在背後陸續補上。手機預設抽樣成 48 張。
+
+**它有用 canvas 嗎？**
+沒有，用的是兩張交替的 `<img>`。canvas 要你自己寫解碼與繪製迴圈，而且每張點陣圖在記憶體裡會多存一份；`<img>` 這些瀏覽器本來就做好了，包含快取和載入優先序。canvas 的優勢在合成與特效，而這個專案不做那些。
+
+**需要 CMS 或後端嗎？**
+不需要。影格就是網址。靜態託管加一份 JSON manifest 就是完整的部署 —— 如果有非工程師要改內容，見 [docs/authoring.zh-TW.md](docs/authoring.zh-TW.md)。
+
+**支援哪些瀏覽器？**
+有 `position: sticky` 的都可以，也就是所有現行瀏覽器。`img.decode()` 有就用，沒有就退回 `load` 事件。
+
+**無障礙呢？**
+`prefers-reduced-motion` 會拿掉停留循環 —— 那是自己會動的動畫 —— 但保留捲動驅動的序列，因為那不是。循環的影格也完全不會下載。
+
+**可以商用嗎？**
+可以，MIT。把著作權聲明留在你的原始碼裡；**看得見的出處標註是我們的請求，不是條件**。見[授權](#授權)。
+
+**為什麼 README 裡的示範是模糊的？**
+那是有授權的素材，用來展示函式庫，不屬於授權釋出的範圍。清晰版在 [tangyi.mx](https://www.tangyi.mx)。
+
+---
+
 ## 文件
 
 | | |
@@ -390,6 +463,10 @@ English: [README.md](README.md) · [pipeline](docs/pipeline.md) ·
 **程式碼、工具與文件**採 MIT，見 [LICENSE](LICENSE)。
 
 Copyright (c) 2026 瑭宜網路多媒體有限公司 Tangyi Studio Co., Ltd.
+
+可以商用、可以修改、可以放進閉源產品。MIT 只要求一件事，而且那不是選配：**把著作權聲明與授權條文留在原始碼裡。** 那就是出處標註 —— 它存在於你的程式庫中，不是你的網頁上。
+
+**看得見的出處標註是我們的請求，不是條件。** 如果這個專案幫你省下一個禮拜，在你的製作名單裡寫一行、或給 [tangyi.mx](https://www.tangyi.mx) 一個連結，對一間小工作室意義很大。不做也不會怎麼樣，這是請求不是條款。
 
 為 [tangyi.mx](https://www.tangyi.mx) 而做，並從中抽出來開源。
 

@@ -435,6 +435,103 @@ it just stops breathing.
 
 ---
 
+## Using it with a framework
+
+The player owns its own DOM and never goes through framework state, so it wants
+a ref and a cleanup — nothing else.
+
+```jsx
+import { useEffect, useRef } from 'react';
+import { ScrollSequence } from 'scroll-frame-sequence';
+import 'scroll-frame-sequence/style.css';
+
+export function Hero({ frames }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const seq = new ScrollSequence(ref.current, { frames, heightVh: 650 });
+    return () => seq.destroy();      // required — it holds a scroll listener
+  }, [frames]);
+
+  return <section ref={ref} />;
+}
+```
+
+Vue's `onMounted` / `onUnmounted` and Svelte's `onMount` return work the same
+way. In React 18+ Strict Mode the effect runs twice in development; `destroy()`
+makes that harmless.
+
+**Do not drive `onProgress` into state on every call.** It fires continuously.
+Write to the DOM, or quantise first — see
+[docs/player.md](docs/player.md#3-progress-does-not-go-through-framework-state).
+
+---
+
+## When to use something else
+
+This library does one thing: it maps scroll position onto a frame index. Three
+neighbouring problems are better served elsewhere.
+
+| If you want | Use |
+|---|---|
+| A 360° product spin, or a sequence playing at high frame rate on its own | A sequence renderer built for playback, e.g. `fast-image-sequence` |
+| To trigger steps as sections come into view — charts, captions, map moves | [scrollama](https://github.com/russellsamora/scrollama) |
+| Smooth or inertial scrolling | Lenis, which works alongside this rather than against it |
+| A general animation timeline tied to scroll | GSAP ScrollTrigger. This is narrower, and ships the asset pipeline with it |
+
+The reason this exists as its own thing: none of those treat the scroll position
+*as* the frame, and none of them tell you how to produce the frames.
+
+---
+
+## FAQ
+
+**How is this different from a `<video>` with `currentTime` tied to scroll?**
+Seeking a video on every scroll event is not reliable across browsers — seeks
+are asynchronous, keyframe-aligned, and throttled on mobile. Stills have no
+seek. The trade is that you must have the frames before the user scrolls, which
+is what [three-layer loading](#three-layer-loading) is for.
+
+**How many frames do I need?**
+Not a number of seconds — a number of scroll pixels per frame. 15–20 px is the
+comfortable band. See [How many frames?](#how-many-frames)
+
+**Is 5 MB of frames not very slow?**
+It would be if you waited for all of it. You do not: a ~2 MB spritesheet makes
+the animation scrollable in about a second, and full-resolution frames stream in
+behind it. Phones subsample to 48 frames by default.
+
+**Does it use canvas?**
+No — two alternating `<img>` elements. Canvas costs you a manual decode-and-draw
+loop and a second copy of every bitmap in memory; the browser already does that
+work for `<img>`, including cache and priority handling. Canvas wins for
+compositing or effects, which this does not do.
+
+**Do I need a CMS or a backend?**
+No. Frames are URLs. Static hosting plus a JSON manifest is a complete
+deployment — see [docs/authoring.md](docs/authoring.md) if a non-developer needs
+to change the sequence.
+
+**Which browsers?**
+Anything with `position: sticky` and `IntersectionObserver`-era JavaScript, so
+all current browsers. `img.decode()` is used when present and falls back to the
+`load` event when it is not.
+
+**What about reduced motion?**
+`prefers-reduced-motion` drops the hold loops — they animate on their own — and
+keeps the scroll-driven sequence, which does not. Their frames are never
+downloaded. See [Reduced motion](#reduced-motion).
+
+**Can I use it commercially?**
+Yes, MIT. Keep the copyright notice in your source; a visible credit is
+appreciated but not required. See [Licence](#licence).
+
+**Why is the demo footage blurred in this README?**
+It is licensed material used to show the library, not part of what the licence
+gives away. The sharp version is at [tangyi.mx](https://www.tangyi.mx).
+
+---
+
 ## Docs
 
 | | |
@@ -474,6 +571,16 @@ visitor sees nothing.
 The **code, tools and documentation** are MIT — see [LICENSE](LICENSE).
 
 Copyright (c) 2026 Tangyi Studio Co., Ltd.
+
+Use it commercially, modify it, ship it in a closed-source product. MIT asks one
+thing in return, and it is not optional: **keep the copyright notice and the
+licence text with the source.** That is attribution — it lives in your
+repository, not on your page.
+
+**A visible credit is appreciated but not required.** If this saved you a week,
+a line in your colophon or a link back to
+[tangyi.mx](https://www.tangyi.mx) means a lot to a small studio. Nothing
+happens if you do not; it is a request, not a term.
 
 Built for [tangyi.mx](https://www.tangyi.mx) and extracted from it.
 
