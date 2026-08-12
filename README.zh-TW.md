@@ -5,6 +5,10 @@
 [![dependencies: none](https://img.shields.io/badge/dependencies-none-2ea043)](package.json)
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-2ea043)](LICENSE)
 
+### **[▶ 線上實例 — demo.tangyi.mx](https://demo.tangyi.mx)**
+
+捲捲看。然後用手機開一次：那裡有一組 `Fit / Fill / Follow` 切換，展示 16:9 的畫面塞進 9:16 螢幕的三種解法。
+
 捲動驅動的逐幀影格序列，附停留循環 —— Apple 產品頁那種效果，加上通常沒人寫下來的那些部分。
 
 ![向前捲、停住、往回捲 —— 序列跟著捲動位置走，不是跟著時間走](docs/demo.webp)
@@ -297,6 +301,26 @@ if (url && isReady(url) && idx !== shown) node.src = url;   // 否則維持現�
 3. **`cx` 的移動要跨至少 10 幀。** 少於 5 幀看起來像抽搐。
 
 還有一件事值得接受：當兩個重要主體分處畫面兩端，9:16 的窗口在數學上就是裝不下。**那是取景決策不是演算法** —— 選 `contain` 讓大家都變小，或選一邊放棄另一邊。唯一錯的做法是默默決定不講。
+
+### 三種解法，沒有哪一種永遠對
+
+同一份時間表可以有三種讀法。[線上實例](https://demo.tangyi.mx)把它們做成切換按鈕，因為這件事用眼睛判斷比讀一段文字快得多。
+
+| | `fit` | `cx` | 你放棄的是 |
+|---|---|---|---|
+| **Fit** | 依時間表，寬構圖用 `contain` | 依時間表 | 上下黑邊。但構圖完整保留 |
+| **Fill** | 全部 `cover` | 固定 `0.5` | 中央約 30% 以外的所有東西 |
+| **Follow** | 全部 `cover` | 依時間表 | 幾乎沒有 —— 直到兩個主體分處兩端，那時它只能選一個 |
+
+三種都只是同一份時間表的一行轉換：
+
+```js
+const fill   = schedule.map((k) => ({ ...k, cx: 0.5, fit: 'cover' }));
+const follow = schedule.map((k) => ({ ...k, fit: 'cover' }));
+sequence.update({ mobilePan: follow });
+```
+
+**大多數素材的正確預設是 Follow**，那也是當初要標 `cx` 的理由。只有在畫面真的不能裁的地方才用 **Fit** —— 群像橫排、寬版標題卡 —— 並且只在那幾格接受黑邊，不要整支片都吃。
 
 ---
 

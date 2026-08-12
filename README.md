@@ -5,6 +5,11 @@
 [![dependencies: none](https://img.shields.io/badge/dependencies-none-2ea043)](package.json)
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-2ea043)](LICENSE)
 
+### **[▶ Live demo — demo.tangyi.mx](https://demo.tangyi.mx)**
+
+Scroll it. Then open it on a phone: there is a `Fit / Fill / Follow` switch that
+shows the three ways a 16:9 frame can survive a 9:16 screen.
+
 Scroll-driven image sequences with hold loops — the Apple-product-page effect,
 plus the parts nobody documents.
 
@@ -359,6 +364,30 @@ Three rules that came from doing it wrong first:
 And one thing worth accepting: when two important subjects sit at opposite edges,
 a 9:16 window mathematically cannot hold both. That is a framing decision, not an
 algorithm — pick `contain` and let it be smaller, or pick a side.
+
+### Three answers, and none of them is always right
+
+The same schedule can be read three ways. The
+[live demo](https://demo.tangyi.mx) puts them behind a switch, because this is
+faster to decide with your eyes than from a paragraph.
+
+| | `fit` | `cx` | What you give up |
+|---|---|---|---|
+| **Fit** | as authored, `contain` on wide shots | as authored | Letterbox bars. The composition survives intact |
+| **Fill** | always `cover` | fixed at `0.5` | Whatever sits outside the middle ~30% of the frame |
+| **Follow** | always `cover` | as authored | Nothing, until two subjects sit at opposite edges — then it has to choose one |
+
+Each is a one-line transform of the schedule you already have:
+
+```js
+const fill   = schedule.map((k) => ({ ...k, cx: 0.5, fit: 'cover' }));
+const follow = schedule.map((k) => ({ ...k, fit: 'cover' }));
+sequence.update({ mobilePan: follow });
+```
+
+**Follow is the right default for most footage**, and the reason to author `cx`
+at all. Reach for **Fit** only where the frame genuinely cannot be cropped — a
+line-up, a wide title card — and accept the bars there rather than everywhere.
 
 ---
 
