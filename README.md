@@ -219,6 +219,12 @@ A hold pins the sequence at one frame and plays a short loop on top, then hands
 back when the user scrolls past. Breathing, flickering neon, hair moving in wind
 — enough that a held frame does not read as a hung page.
 
+![A held frame that keeps moving — the scroll position is fixed while a short loop plays on top](docs/hold-loop.webp)
+
+*The scroll position is not moving here. The frame underneath is pinned; a
+24-frame loop plays on top. This one runs ping-pong: its ends are 2.9× a normal
+step apart, so playing it `1..24, 1..24` would visibly jump every cycle.*
+
 Scroll budget is in units: every frame costs 1, a hold costs `weight` more.
 
 ```
@@ -459,9 +465,10 @@ Copyright (c) 2026 Tangyi Studio Co., Ltd.
 
 Built for [tangyi.mx](https://www.tangyi.mx) and extracted from it.
 
-**One exception, stated explicitly:** `docs/demo.webp` is a still sequence from
-that site, included so the README can show what the library does. It is
-© Tangyi Studio Co., Ltd., **not** covered by the MIT licence, and not part of
-the published package. Everything else here is yours to use.
+**Two exceptions, stated explicitly:** `docs/demo.webp` and
+`docs/hold-loop.webp` are still sequences from that site, included so the README
+can show what the library does. They are © Tangyi Studio Co., Ltd., **not**
+covered by the MIT licence, and not part of the published package. Everything
+else here is yours to use.
 
 No other media is included — bring your own video.

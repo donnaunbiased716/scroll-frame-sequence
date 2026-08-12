@@ -7,8 +7,9 @@ frames_*/
 hold*/
 *.webp
 !examples/**/*.webp
-# the one deliberate exception — see README, "Licence"
+# the two deliberate exceptions — see README, "Licence"
 !docs/demo.webp
+!docs/hold-loop.webp
 spritesheet*.png
 survey_*.png
 review_*.jpg
