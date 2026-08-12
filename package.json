@@ -27,15 +27,21 @@
   "bugs": "https://github.com/tangyistudio/scroll-frame-sequence/issues",
   "keywords": [
     "scroll",
+    "scroll-sequence",
     "scrollytelling",
     "image-sequence",
+    "image-sequence-player",
     "frame-sequence",
+    "frame-by-frame",
     "scroll-driven-animation",
     "sticky",
+    "sticky-scroll",
     "spritesheet",
+    "webp",
     "canvas-alternative",
     "apple-style",
-    "hero-animation"
+    "hero-animation",
+    "zero-dependency"
   ],
   "license": "MIT",
   "author": "Tangyi Studio Co., Ltd.",
