@@ -446,6 +446,15 @@ Vue 的 `onMounted` / `onUnmounted`、Svelte 的 `onMount` 回傳值都是同一
 **需要 CMS 或後端嗎？**
 不需要。影格就是網址。靜態託管加一份 JSON manifest 就是完整的部署 —— 如果有非工程師要改內容，見 [docs/authoring.zh-TW.md](docs/authoring.zh-TW.md)。
 
+**可以搭配 Next.js、Nuxt 這類伺服器端渲染嗎？**
+可以，規則跟任何操作 DOM 的函式庫一樣：**在 effect 裡建立，不要在 render 期間建立。** 建構子會讀 `window` 和 `document`，在伺服器端呼叫會直接拋錯。上面的 [React 範例](#搭配框架使用)已經是正確寫法 —— 不需要 dynamic import，也不需要 `ssr: false`。
+
+**有 TypeScript 型別嗎？**
+有。型別跟著套件一起發佈（`src/scroll-sequence.d.ts`），`import { ScrollSequence }` 直接就有型別，不用另外裝 `@types`。已用 `tsc --strict` 驗過。
+
+**可以在執行中換掉影格嗎？**
+`sequence.update({ frames })`。它會重算捲動預算、保留已經抓好的圖，並在當前捲動位置重新套用。
+
 **支援哪些瀏覽器？**
 有 `position: sticky` 的都可以，也就是所有現行瀏覽器。`img.decode()` 有就用，沒有就退回 `load` 事件。
 

@@ -5,8 +5,12 @@
   "type": "module",
   "main": "src/scroll-sequence.js",
   "module": "src/scroll-sequence.js",
+  "types": "src/scroll-sequence.d.ts",
   "exports": {
-    ".": "./src/scroll-sequence.js",
+    ".": {
+      "types": "./src/scroll-sequence.d.ts",
+      "default": "./src/scroll-sequence.js"
+    },
     "./style.css": "./src/scroll-sequence.css",
     "./package.json": "./package.json"
   },

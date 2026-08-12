@@ -541,6 +541,21 @@ No. Frames are URLs. Static hosting plus a JSON manifest is a complete
 deployment — see [docs/authoring.md](docs/authoring.md) if a non-developer needs
 to change the sequence.
 
+**Does it work with Next.js, Nuxt, or anything server-rendered?**
+Yes, with the same rule as any DOM library: construct it in an effect, not
+during render. The constructor reads `window` and `document`, so calling it on
+the server throws. The [React snippet](#using-it-with-a-framework) above already
+does the right thing — no dynamic import or `ssr: false` wrapper needed.
+
+**Is there TypeScript support?**
+Yes. Types ship with the package (`src/scroll-sequence.d.ts`), so `import
+{ ScrollSequence }` is typed with no `@types` install. Checked against
+`tsc --strict`.
+
+**Can I swap the frames after it is running?**
+`sequence.update({ frames })`. It rebuilds the scroll budget, keeps the images
+it has already fetched, and re-applies at the current scroll position.
+
 **Which browsers?**
 Anything with `position: sticky` and `IntersectionObserver`-era JavaScript, so
 all current browsers. `img.decode()` is used when present and falls back to the
